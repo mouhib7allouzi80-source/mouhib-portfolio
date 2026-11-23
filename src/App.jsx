@@ -1,416 +1,327 @@
-import { useEffect, useState } from "react";
 import "./App.css";
 
-const GITHUB = "https://github.com/mouhib7allouzi80-source";
-const LINKEDIN = "https://www.linkedin.com/in/mouhib-ifaoui-982290351/";
+const GITHUB_URL = "https://github.com/mouhib7allouzi80-source";
+const LINKEDIN_URL = "https://www.linkedin.com/in/mouhib-ifaoui-982290351/";
 const EMAIL = "mouhib7allouzi80@gmail.com";
-const CV = "/cv-mouhib.pdf";
+const CV_URL = "/cv-mouhib.pdf";
+const PROFILE_IMAGE = "/profile.jpg";
 
 const skills = [
-  { group: "Development", items: ["Python", "C / C++", "Flask", "HTML5", "CSS3", "SQL"] },
-  { group: "Networks & Systems", items: ["TCP/IP", "IPv4 / IPv6", "DNS", "DHCP", "Linux", "SSH"] },
-  { group: "DevOps & Observability", items: ["Docker", "Docker Compose", "Git", "GitHub Actions", "Jenkins", "Kubernetes", "Minikube", "Helm", "Prometheus", "Grafana", "SonarQube", "PostgreSQL"] },
+  "Python", "C / C++", "HTML5", "CSS3", "Flask", "SQL",
+  "TCP/IP", "IPv4 / IPv6", "DNS", "DHCP", "Linux", "SSH",
+  "Docker", "Docker Compose", "Git", "GitHub", "Jenkins",
+  "GitHub Actions", "Kubernetes", "Minikube", "Helm",
+  "PostgreSQL", "Prometheus", "Grafana", "SonarQube"
 ];
 
-const experience = [
+const experiences = [
   {
-    index: "01",
+    number: "01",
     company: "JobGate",
     role: "DevOps Intern",
-    period: "September 2025",
-    summary: "Explored the delivery and operation of microservice-based applications, with a focus on automation, quality and observability.",
-    points: [
-      "Worked with Spring Boot microservices and Docker.",
-      "Explored application deployment with Kubernetes.",
-      "Worked with GitLab CI pipelines.",
-      "Used SonarQube, Prometheus and Grafana.",
+    date: "September 2025",
+    description: "Worked on microservices development and deployment, CI/CD automation, code quality analysis, and infrastructure monitoring.",
+    tasks: [
+      "Developed microservices using Spring Boot and Docker.",
+      "Explored deployment on Kubernetes.",
+      "Worked with GitLab CI for CI/CD pipelines.",
+      "Used SonarQube, Prometheus, and Grafana."
     ],
-    stack: ["Spring Boot", "Docker", "Kubernetes", "GitLab CI", "SonarQube"],
+    tags: ["Spring Boot", "Docker", "Kubernetes", "GitLab CI", "SonarQube"]
   },
   {
-    index: "02",
+    number: "02",
     company: "Satoripop",
     role: "Web Development Intern",
-    period: "June 2026",
-    summary: "Contributed to web application development and the integration of business-focused application modules.",
-    points: [
-      "Implemented MVC architecture and application routing.",
+    date: "June 2026",
+    description: "Contributed to web application development and application module integration.",
+    tasks: [
+      "Implemented MVC architecture and routing.",
       "Developed authentication and CRUD functionality.",
-      "Worked with Blade templates, HTML and CSS.",
-      "Contributed to middleware, plugins, accounting and invoicing modules.",
+      "Optimized Blade templates and integrated HTML/CSS templates.",
+      "Worked with middleware, plugins, accounting, and invoicing modules."
     ],
-    stack: ["MVC", "Blade", "PHP", "HTML", "CSS"],
+    tags: ["MVC", "Blade", "PHP", "HTML", "CSS"]
   },
   {
-    index: "03",
+    number: "03",
     company: "Enova Robotics",
     role: "PGuard — Autonomous Security Robot",
-    period: "June 2026",
-    summary: "Studied the architecture and technologies behind an autonomous mobile robot designed for surveillance and security.",
-    points: [
-      "Explored GPS and 3D LiDAR navigation and localization.",
-      "Studied Wi-Fi Mesh and 4G communication systems.",
-      "Explored AI-based vision and intrusion detection.",
-      "Analyzed video and alert transmission to a supervision interface.",
+    date: "June 2026",
+    description: "Explored the architecture and technologies of an autonomous mobile robot designed for surveillance and security.",
+    tasks: [
+      "Studied GPS and 3D LiDAR navigation and localization.",
+      "Explored Wi-Fi Mesh and 4G communication systems.",
+      "Studied AI-based vision and intrusion detection.",
+      "Analyzed video and alert transmission to a supervision interface."
     ],
-    stack: ["Robotics", "GPS", "3D LiDAR", "Wi-Fi Mesh", "4G", "AI"],
+    tags: ["Robotics", "GPS", "3D LiDAR", "Wi-Fi Mesh", "4G", "AI"]
   },
+  {
+    number: "04",
+    company: "Hotel & Hospitality",
+    role: "Seasonal Hotel Entertainment Animator",
+    date: "Summer seasons · 5 years",
+    description: "Created memorable guest experiences through entertainment, group activities, and genuine connections with people from different backgrounds.",
+    tasks: [
+      "Organized and led recreational, sports, and entertainment activities for hotel guests.",
+      "Encouraged participation and helped create a welcoming, energetic atmosphere.",
+      "Built lasting relationships with returning guests, with friendships that continued beyond the summer seasons.",
+      "Developed communication, teamwork, public-speaking, and adaptability skills in a fast-paced hospitality environment."
+    ],
+    tags: ["Guest Relations", "Entertainment", "Teamwork", "Communication", "Leadership"]
+  }
 ];
 
 const projects = [
   {
     number: "01",
-    type: "DEVSECOPS / APPLICATION SECURITY",
-    title: "Task Manager",
-    subtitle: "From application code to a security-aware delivery pipeline.",
-    description: "A Flask task management application containerized with Docker and Docker Compose, backed by PostgreSQL and supported by CI/CD and security scanning tools.",
-    stack: ["Flask", "PostgreSQL", "Docker", "Jenkins", "Bandit", "Trivy", "Gitleaks"],
-    className: "project-art-one",
-    mark: "01",
-    link: "https://github.com/mouhib7allouzi80-source/devsecops-task-manager",
+    category: "DEVSECOPS",
+    title: "DevSecOps Task Manager",
+    description: "A containerized Flask task manager with PostgreSQL, Docker Compose, CI/CD automation, and integrated security scanning.",
+    technologies: ["Flask", "PostgreSQL", "Docker", "Jenkins", "Bandit", "Trivy", "Gitleaks"]
   },
   {
     number: "02",
-    type: "CLOUD / OBSERVABILITY",
+    category: "CLOUD & OBSERVABILITY",
     title: "Kubernetes Monitoring Lab",
-    subtitle: "Making infrastructure visible.",
-    description: "A hands-on Kubernetes lab exploring cluster monitoring with Prometheus, Grafana and Node Exporter.",
-    stack: ["Kubernetes", "Minikube", "Prometheus", "Grafana", "Node Exporter"],
-    className: "project-art-two",
-    mark: "02",
-    link: "https://github.com/mouhib7allouzi80-source/kubernetes-monitoring-lab",
+    description: "A hands-on Kubernetes environment exploring infrastructure monitoring and observability.",
+    technologies: ["Kubernetes", "Minikube", "Prometheus", "Grafana", "Node Exporter"]
   },
   {
     number: "03",
-    type: "INTERNET OF THINGS",
+    category: "INTERNET OF THINGS",
     title: "Smart Greenhouse",
-    subtitle: "A connected environment that reacts to its conditions.",
-    description: "An IoT concept for monitoring temperature, soil moisture and light, with automated environmental actions using sensors and actuators.",
-    stack: ["Arduino", "Sensors", "C++", "IoT"],
-    className: "project-art-three",
-    mark: "03",
-    link: "https://github.com/mouhib7allouzi80-source/smart-greenhouse-iot",
-  },
+    description: "An IoT concept for monitoring temperature, soil moisture, and light, with automated environmental control.",
+    technologies: ["Arduino", "Sensors", "C++", "IoT"]
+  }
 ];
 
-const capabilities = [
-  ["01", "Build", "Developing web applications and practical software solutions."],
-  ["02", "Connect", "Understanding networks, Linux systems and connected devices."],
-  ["03", "Automate", "Containerization, CI/CD workflows and repeatable delivery."],
-  ["04", "Observe", "Monitoring applications and infrastructure with clear signals."],
-];
-
-function IconArrow() {
-  return <span aria-hidden="true" className="arrow-icon">↗</span>;
-}
-
-function GitHubIcon() {
+function SectionTitle({ eyebrow, title, accent }) {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="github-icon">
-      <path
-        fill="currentColor"
-        d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.56.1.76-.24.76-.54v-2.08c-3.1.67-3.76-1.32-3.76-1.32-.5-1.28-1.24-1.62-1.24-1.62-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.6 1.21 3.23.92.1-.72.39-1.21.7-1.49-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.22 1.15-3-.12-.28-.5-1.42.11-2.96 0 0 .94-.3 3.05 1.15a10.6 10.6 0 0 1 5.55 0c2.11-1.45 3.05-1.15 3.05-1.15.61 1.54.23 2.68.11 2.96.72.78 1.15 1.78 1.15 3 0 4.29-2.62 5.23-5.11 5.51.4.35.75 1.03.75 2.08v3.05c0 .3.2.65.77.54A11.1 11.1 0 0 0 12 .9Z"
-      />
-    </svg>
+    <div className="section-heading">
+      <p className="eyebrow">{eyebrow}</p>
+      <h2>{title}<br /><span>{accent}</span></h2>
+    </div>
   );
 }
 
-function SectionEyebrow({ children }) {
-  return <div className="section-eyebrow"><span />{children}</div>;
-}
-
-function Navigation() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const closeMenu = () => setMenuOpen(false);
-
+function App() {
   return (
-    <header className="site-header">
-      <a className="wordmark" href="#top" onClick={closeMenu} aria-label="Mouhib home">
-        M<span>.</span>
-      </a>
-      <button
-        className="menu-toggle"
-        type="button"
-        aria-label="Toggle navigation"
-        aria-expanded={menuOpen}
-        onClick={() => setMenuOpen((open) => !open)}
-      >
-        <span /><span />
-      </button>
-      <nav className={`main-nav ${menuOpen ? "is-open" : ""}`} aria-label="Main navigation">
-        {["About", "Experience", "Skills", "Projects"].map((item) => (
-          <a key={item} href={`#${item.toLowerCase()}`} onClick={closeMenu}>{item}</a>
-        ))}
-        <a className="nav-cta" href="#contact" onClick={closeMenu}>Let&apos;s talk <IconArrow /></a>
-      </nav>
-    </header>
-  );
-}
+    <main>
+      <header className="navbar">
+        <a className="brand" href="#home">
+          <span className="brand-mark">M.</span>
+          <span>MOHIB IFAOUI</span>
+        </a>
+        <nav className="nav-links" aria-label="Main navigation">
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#experience">Experience</a>
+          <a href="#skills">Skills</a>
+          <a href="#beyond">Beyond</a>
+          <a href="#projects">Projects</a>
+          <a className="nav-contact" href="#contact">Contact ↗</a>
+        </nav>
+      </header>
 
-function Hero() {
-  return (
-    <section className="hero-section" id="top">
-      <div className="hero-grid-lines" aria-hidden="true" />
-      <div className="hero-copy">
-        <div className="availability"><span className="availability-dot" /> OPEN TO PFE / INTERNSHIP OPPORTUNITIES</div>
-        <p className="hero-kicker">COMPUTER SYSTEMS ENGINEERING · IoT</p>
-        <h1>
-          Building the<br />
-          <span>systems</span> behind<br />
-          what&apos;s next<span className="hero-period">.</span>
-        </h1>
-        <p className="hero-intro">
-          I&apos;m <strong>Mouhib Ifaoui</strong> — an aspiring DevOps and systems engineer
-          interested in cloud infrastructure, cybersecurity, networks and connected technology.
-        </p>
-        <div className="hero-actions">
-          <a className="button button-primary" href="#projects">Explore my work <IconArrow /></a>
-          <a className="button button-quiet" href={CV} target="_blank" rel="noreferrer">Download CV <span>↓</span></a>
-        </div>
-        <div className="hero-meta">
-          <span><i /> BASED IN TUNISIA</span>
-          <span>SCROLL TO DISCOVER <b>↓</b></span>
-        </div>
-      </div>
-
-      <div className="hero-art" aria-label="Abstract portrait composition">
-        <div className="art-orbit orbit-a" />
-        <div className="art-orbit orbit-b" />
-        <div className="art-glow" />
-        <div className="art-index">PORTFOLIO <span>2026</span></div>
-        <div className="portrait-frame">
-          <div className="portrait-image">
-            <img
-              src="/profile.jpg"
-              alt="Mouhib Ifaoui"
-              onError={(event) => { event.currentTarget.style.display = "none"; }}
-            />
-            <div className="portrait-placeholder">
-              <span>MI</span>
-              <small>ADD YOUR PORTRAIT<br />AS public/profile.jpg</small>
-            </div>
-          </div>
-          <div className="portrait-overlay" />
-          <div className="portrait-label">
-            <span>MOuHIB IFAOUI</span>
-            <small>DEVOPS · NETWORKS · IoT</small>
-          </div>
-        </div>
-        <div className="floating-chip chip-top"><span className="chip-pulse" /> SYSTEMS ONLINE</div>
-        <div className="floating-chip chip-bottom">DOCKER <b>×</b> CLOUD <b>×</b> SECURITY</div>
-        <div className="vertical-note">ENGINEERING WITH INTENTION</div>
-      </div>
-
-      <div className="hero-bottom-line">
-        <span>01 / INTRODUCTION</span>
-        <span>SCROLL TO EXPLORE THE PORTFOLIO</span>
-        <span>34°00&apos; N — 10°00&apos; E</span>
-      </div>
-    </section>
-  );
-}
-
-function About() {
-  return (
-    <section className="section about-section" id="about">
-      <div className="section-topline"><SectionEyebrow>01 — ABOUT</SectionEyebrow><span className="section-count">A LITTLE ABOUT ME</span></div>
-      <div className="about-layout">
-        <h2 className="display-heading">Curiosity is<br />my <span>infrastructure.</span></h2>
-        <div className="about-text">
-          <p className="large-copy">
-            I&apos;m a third-year Licence student in Computer Systems Engineering,
-            specializing in Internet of Things at ISITCOM, Hammam Sousse.
+      <section className="hero section-container" id="home">
+        <div className="hero-content">
+          <div className="availability"><span className="status-dot" />OPEN TO PROFESSIONAL OPPORTUNITIES</div>
+          <p className="eyebrow">HELLO, I'M</p>
+          <h1>Mouhib<br /><span>Ifaoui.</span></h1>
+          <h2>Networks, DevOps &amp;<br />Cybersecurity Enthusiast.</h2>
+          <p className="hero-description">
+            Third-year Computer Systems Engineering student specializing in IoT.
+            Interested in building, deploying, and securing modern software and infrastructure.
           </p>
-          <p>
-            I enjoy understanding how technology works as a whole — from the code
-            that powers an application to the infrastructure that runs it and the
-            networks that connect it. My interests sit at the intersection of
-            development, DevOps, cybersecurity and embedded systems.
-          </p>
-          <a className="text-link" href={LINKEDIN} target="_blank" rel="noreferrer">Connect on LinkedIn <IconArrow /></a>
-        </div>
-      </div>
-      <div className="capability-grid">
-        {capabilities.map(([number, title, description]) => (
-          <article className="capability-card" key={number}>
-            <span className="capability-number">{number}</span>
-            <h3>{title}</h3>
-            <p>{description}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Experience() {
-  return (
-    <section className="section experience-section" id="experience">
-      <div className="section-topline"><SectionEyebrow>02 — EXPERIENCE</SectionEyebrow><span className="section-count">LEARNING BY BUILDING</span></div>
-      <div className="section-heading-row">
-        <h2 className="display-heading">Where I&apos;ve<br /><span>made impact.</span></h2>
-        <p className="section-side-note">Internships and practical exposure across software development, DevOps and autonomous systems.</p>
-      </div>
-      <div className="experience-timeline">
-        {experience.map((item) => (
-          <article className="experience-item" key={item.index}>
-            <div className="experience-index">{item.index}</div>
-            <div className="experience-main">
-              <div className="experience-heading">
-                <div><h3>{item.company}</h3><p>{item.role}</p></div>
-                <time>{item.period}</time>
-              </div>
-              <p className="experience-summary">{item.summary}</p>
-              <ul className="experience-points">
-                {item.points.map((point) => <li key={point}>{point}</li>)}
-              </ul>
-              <div className="tag-row">{item.stack.map((tag) => <span key={tag}>{tag}</span>)}</div>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Skills() {
-  return (
-    <section className="section skills-section" id="skills">
-      <div className="section-topline"><SectionEyebrow>03 — TOOLKIT</SectionEyebrow><span className="section-count">TOOLS OF THE TRADE</span></div>
-      <div className="section-heading-row">
-        <h2 className="display-heading">A growing<br /><span>technical stack.</span></h2>
-        <p className="section-side-note">A practical toolkit built through coursework, internships, labs and personal projects.</p>
-      </div>
-      <div className="skill-groups">
-        {skills.map((group, index) => (
-          <article className="skill-group" key={group.group}>
-            <div className="skill-group-heading"><span>0{index + 1}</span><h3>{group.group}</h3></div>
-            <div className="skill-pills">{group.items.map((skill) => <span key={skill}>{skill}</span>)}</div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Projects() {
-  return (
-    <section className="section projects-section" id="projects">
-      <div className="section-topline"><SectionEyebrow>04 — SELECTED WORK</SectionEyebrow><span className="section-count">IDEAS INTO IMPLEMENTATION</span></div>
-      <div className="section-heading-row">
-        <h2 className="display-heading">Things I&apos;ve<br /><span>worked on.</span></h2>
-        <p className="section-side-note">A selection of practical projects exploring application delivery, infrastructure monitoring and IoT.</p>
-      </div>
-      <div className="project-grid">
-        {projects.map((project) => (
-          <article className={`project-card ${project.className}`} key={project.number}>
-            <div className="project-art">
-              <span className="project-art-number">{project.mark}</span>
-              <div className="project-visual-core">
-                {project.number === "01" && <div className="terminal-visual"><div className="terminal-bar"><i /><i /><i /></div><span>$ docker compose up</span><span className="terminal-muted">✓ services started</span><span>$ trivy image task-manager</span><span className="terminal-blue">scanning image...</span></div>}
-                {project.number === "02" && <div className="monitor-visual"><div className="monitor-top">CLUSTER / HEALTH</div><div className="monitor-bars"><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /></div><div className="monitor-bottom"><span>CPU 34%</span><span>MEM 62%</span></div></div>}
-                {project.number === "03" && <div className="greenhouse-visual"><div className="greenhouse-roof" /><div className="greenhouse-base"><i /><i /><i /><i /></div><span className="sensor sensor-one">TEMP 26°</span><span className="sensor sensor-two">SOIL 48%</span></div>}
-              </div>
-              <span className="project-art-caption">{project.type}</span>
-            </div>
-            <div className="project-info">
-              <div className="project-title-line">
-                <span>{project.number}</span>
-                <a
-                  className="project-github-icon"
-                  href={project.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`Open ${project.title} repository on GitHub`}
-                >
-                  <GitHubIcon />
-                </a>
-              </div>
-              <h3>{project.title}</h3>
-              <h4>{project.subtitle}</h4>
-              <p>{project.description}</p>
-              <div className="tag-row">{project.stack.map((tag) => <span key={tag}>{tag}</span>)}</div>
-              <a
-                className="project-source-button"
-                href={project.link}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <GitHubIcon />
-                <span>VIEW SOURCE CODE</span>
-                <IconArrow />
-              </a>
-            </div>
-          </article>
-        ))}
-      </div>
-      <a className="all-work-link" href={GITHUB} target="_blank" rel="noreferrer">Explore GitHub <IconArrow /></a>
-    </section>
-  );
-}
-
-function Contact() {
-  return (
-    <section className="contact-section" id="contact">
-      <div className="contact-background-orb" />
-      <div className="contact-inner">
-        <SectionEyebrow>05 — GET IN TOUCH</SectionEyebrow>
-        <p className="contact-pretitle">HAVE A PROJECT OR OPPORTUNITY?</p>
-        <h2>Let&apos;s build<br /><span>what&apos;s next.</span></h2>
-        <a className="contact-email" href={`mailto:${EMAIL}`}>{EMAIL} <IconArrow /></a>
-        <div className="contact-bottom">
-          <p>Open to PFE internships, collaborations and opportunities to learn and contribute.</p>
+          <div className="hero-actions">
+            <a href="#projects" className="primary-button">Explore my work ↗</a>
+            <a href={CV_URL} download="Mouhib_Ifaoui_CV.pdf" className="secondary-button">Download CV ↓</a>
+          </div>
           <div className="social-links">
-            <a href={GITHUB} target="_blank" rel="noreferrer">GITHUB <IconArrow /></a>
-            <a href={LINKEDIN} target="_blank" rel="noreferrer">LINKEDIN <IconArrow /></a>
-            <a href={CV} target="_blank" rel="noreferrer">CV <span>↓</span></a>
+            <a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub ↗</a>
+            <a href={LINKEDIN_URL} target="_blank" rel="noreferrer">LinkedIn ↗</a>
+            <a href={`mailto:${EMAIL}`}>Email ↗</a>
           </div>
         </div>
-      </div>
-    </section>
+
+        <div className="hero-visual">
+          <div className="visual-orbit orbit-one" />
+          <div className="visual-orbit orbit-two" />
+          <div className="hero-portrait">
+            <img src={PROFILE_IMAGE} alt="Portrait of Mouhib Ifaoui" className="profile-photo" />
+            <div className="portrait-caption">
+              <strong>Mouhib Ifaoui</strong>
+              <span>NETWORKS · DEVOPS · SECURITY</span>
+            </div>
+          </div>
+          <div className="floating-tag tag-top">01 / CONNECT</div>
+          <div className="floating-tag tag-bottom">BUILDING THE FUTURE</div>
+        </div>
+
+        <div className="hero-footer">
+          <span>BASED IN TUNISIA</span>
+          <span>NETWORKS / DEVOPS / CYBERSECURITY</span>
+          <a href="#about">SCROLL TO DISCOVER ↓</a>
+        </div>
+      </section>
+
+      <section className="about-section section-container" id="about">
+        <SectionTitle eyebrow="01 — GET TO KNOW ME" title="Beyond the" accent="technology." />
+        <div className="about-grid">
+          <div className="about-intro">
+            <p className="about-lead">Curious by nature. Driven by technology.<span> Focused on building what comes next.</span></p>
+            <p>I'm a third-year Licence student in Computer Systems Engineering, specializing in Internet of Things at ISITCOM, Hammam Sousse, Tunisia.</p>
+            <p>My interests include computer networks, cybersecurity, DevOps, cloud computing, and embedded systems.</p>
+            <p>Through internships and personal projects, I've explored software development, containerization, CI/CD, Kubernetes, monitoring, and connected systems.</p>
+            <p>Outside technology, five years of seasonal hotel entertainment work and my coaching background have taught me how to connect with people, lead activities, and create positive experiences. I value the lasting friendships built with guests from different cultures as much as the professional skills gained along the way.</p>
+          </div>
+          <div className="about-side">
+            <article className="info-card">
+              <span className="card-index">01 / EDUCATION</span>
+              <h3>Computer Systems Engineering</h3>
+              <p>ISITCOM — Hammam Sousse, Tunisia</p>
+              <span className="card-detail">IoT specialization · 2023–Present</span>
+            </article>
+            <article className="info-card">
+              <span className="card-index">02 / INTERESTS</span>
+              <h3>Networks &amp; DevSecOps</h3>
+              <p>Infrastructure, automation, cloud, and security.</p>
+              <span className="card-detail">Practical learning and experimentation</span>
+            </article>
+            <article className="info-card">
+              <span className="card-index">03 / OBJECTIVE</span>
+              <h3>Professional Growth</h3>
+              <p>Looking to contribute to challenging technical projects.</p>
+              <span className="card-detail">Tunisia · Open to opportunities</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="experience-section section-container" id="experience">
+        <SectionTitle eyebrow="02 — PROFESSIONAL JOURNEY" title="Experience that" accent="shapes me." />
+        <div className="experience-list">
+          {experiences.map((experience) => (
+            <article className="experience-card" key={experience.number}>
+              <div className="experience-number">{experience.number}</div>
+              <div className="experience-content">
+                <span className="project-category">{experience.date}</span>
+                <h3>{experience.company}</h3>
+                <h4>{experience.role}</h4>
+                <p>{experience.description}</p>
+                <ul>{experience.tasks.map((task) => <li key={task}>{task}</li>)}</ul>
+                <div className="project-tags">{experience.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="skills-section section-container" id="skills">
+        <SectionTitle eyebrow="03 — MY TOOLKIT" title="Technologies I" accent="work with." />
+        <p className="section-description">Technologies and tools explored through internships, coursework, and practical projects.</p>
+        <div className="skills-grid">
+          {skills.map((skill, index) => (
+            <div className="skill-item" key={skill}>
+              <span className="skill-number">{String(index + 1).padStart(2, "0")}</span>
+              <span>{skill}</span>
+              <span className="skill-arrow">↗</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="beyond-section section-container" id="beyond">
+        <SectionTitle eyebrow="04 — BEYOND TECHNOLOGY" title="Discipline, people" accent="and growth." />
+        <p className="section-description">
+          My interests in fitness, nutrition, and coaching complement my engineering journey.
+          They reflect a commitment to discipline, learning, and helping others progress.
+        </p>
+        <div className="credentials-grid">
+          <article className="credential-card">
+            <a className="certificate-image-link" href="/certificates/nasm-nutrition-coach.png" target="_blank" rel="noreferrer">
+              <img className="certificate-image" src="/certificates/nasm-nutrition-coach.png" alt="NASM Certified Nutrition Coach certificate" loading="lazy" />
+              <span className="certificate-view">View certificate ↗</span>
+            </a>
+            <span className="card-index">01 / NASM</span>
+            <h3>Certified Nutrition Coach</h3>
+            <p>National Academy of Sports Medicine (NASM)</p>
+            <span className="card-detail">Nutrition · Coaching · Personal development</span>
+          </article>
+          <article className="credential-card">
+            <a className="certificate-image-link" href="/certificates/ifbb-personal-trainer.png" target="_blank" rel="noreferrer">
+              <img className="certificate-image" src="/certificates/ifbb-personal-trainer.png" alt="IFBB Certified Personal Fitness Trainer certificate" loading="lazy" />
+              <span className="certificate-view">View certificate ↗</span>
+            </a>
+            <span className="card-index">02 / IFBB</span>
+            <h3>Certified Personal Fitness Trainer</h3>
+            <p>International Fitness &amp; Bodybuilding Federation (IFBB)</p>
+            <span className="card-detail">Personal training · Fitness</span>
+          </article>
+          <article className="credential-card">
+            <a className="certificate-image-link" href="/certificates/ifbb-master-fitness.png" target="_blank" rel="noreferrer">
+              <img className="certificate-image" src="/certificates/ifbb-master-fitness.png" alt="IFBB Master in Bodybuilding and Fitness Methods diploma" loading="lazy" />
+              <span className="certificate-view">View certificate ↗</span>
+            </a>
+            <span className="card-index">03 / IFBB · 2022</span>
+            <h3>Master in Bodybuilding and Fitness Methods</h3>
+            <p>International Fitness &amp; Bodybuilding Federation (IFBB)</p>
+            <span className="card-detail">Bodybuilding · Fitness methods</span>
+          </article>
+        </div>
+        <div className="people-note">
+          <span className="people-note-mark">“</span>
+          <div>
+            <h3>Beyond code, I connect with people.</h3>
+            <p>For me, hospitality is about more than organizing activities. It is about creating memories, building trust, and forming friendships that can last for years.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="projects-section section-container" id="projects">
+        <SectionTitle eyebrow="05 — SELECTED WORK" title="Learning by" accent="building." />
+        <div className="projects-list">
+          {projects.map((project) => (
+            <article className="project-card" key={project.number}>
+              <div className="project-number">{project.number}</div>
+              <div className="project-content">
+                <span className="project-category">{project.category}</span>
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                <div className="project-tags">{project.technologies.map((technology) => <span key={technology}>{technology}</span>)}</div>
+                <a className="project-link" href={GITHUB_URL} target="_blank" rel="noreferrer">View GitHub profile ↗</a>
+              </div>
+              <div className="project-icon">↗</div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="contact-section section-container" id="contact">
+        <p className="eyebrow">05 — LET'S CONNECT</p>
+        <h2>Let's build<br /><span>something meaningful.</span></h2>
+        <p className="contact-description">Interested in working together or discussing an opportunity? Feel free to reach out. I'd be happy to connect.</p>
+        <div className="hero-actions">
+          <a className="primary-button" href={`mailto:${EMAIL}`}>Send me an email ↗</a>
+          <a className="secondary-button" href={CV_URL} download="Mouhib_Ifaoui_CV.pdf">Download my CV ↓</a>
+        </div>
+        <div className="contact-socials">
+          <a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub ↗</a>
+          <a href={LINKEDIN_URL} target="_blank" rel="noreferrer">LinkedIn ↗</a>
+          <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+        </div>
+      </section>
+
+      <footer className="footer section-container">
+        <a className="brand" href="#home"><span className="brand-mark">M.</span><span>MOHIB IFAOUI</span></a>
+        <p>Designed with curiosity. Built with purpose.</p>
+        <a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub ↗</a>
+        <span>© 2026</span>
+      </footer>
+    </main>
   );
 }
 
-function Footer() {
-  return (
-    <footer className="site-footer">
-      <a className="footer-mark" href="#top">M<span>.</span></a>
-      <span>DESIGNED & BUILT BY MOuHIB IFAOUI</span>
-      <a href="#top">BACK TO TOP ↑</a>
-      <span>© 2026</span>
-    </footer>
-  );
-}
-
-export default function App() {
-  useEffect(() => {
-    const revealItems = document.querySelectorAll(".section, .contact-inner");
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      }),
-      { threshold: 0.12 }
-    );
-    revealItems.forEach((item) => observer.observe(item));
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <>
-      <Navigation />
-      <main>
-        <Hero />
-        <About />
-        <Experience />
-        <Skills />
-        <Projects />
-        <Contact />
-      </main>
-      <Footer />
-    </>
-  );
-}
+export default App;
